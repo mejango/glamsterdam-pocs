@@ -14,9 +14,7 @@ import json, subprocess
 from concurrent.futures import ThreadPoolExecutor
 
 MAINNET, SEPOLIA = 'https://ethereum-rpc.publicnode.com', 'https://ethereum-sepolia-rpc.publicnode.com'
-CHAINS = {  # L1 RPC, L1CrossDomainMessenger proxy
-    'Base on mainnet': (MAINNET, '0x866E82a600A1414e583f7F13623F1aC5d58b0Afa'),
-    'Base Sepolia on Glamsterdam Sepolia': (SEPOLIA, '0xC34855F4De64F1840e5686e64278da901e261f20'),
+CHAINS = {  # L1 RPC, OP L1CrossDomainMessenger proxy. OP Sepolia already runs the v9 messenger that records failures.
     'OP mainnet on mainnet': (MAINNET, '0x25ace71c97B33Cc4729CF772ae268934F7ab5fA1'),
     'OP Sepolia on Glamsterdam Sepolia': (SEPOLIA, '0x58Cc85b8D04EA49cC6DBd3CbFFd00B4B8D6cb3ef'),
 }
