@@ -83,13 +83,10 @@ contract that sends it is immutable. Every way an app can respond has the same f
   provide and strand the batch's ETH in the portal. The cap has to be a number that
   stays under L1's transaction gas cap, and the sending chain has no way to read
   that. Another hardcoded number.
-- **Make the cap an admin setting.** Works, but adds an admin to a system designed
-  not to have one.
-- **Only let the project's operator raise the limit.** No number at all, and no
-  stranger can strand funds, because only an account the project trusts can ask for
-  more gas. But anyone else who sends a batch, like a public relayer, is back to the
-  hardcoded minimum, so their messages still arrive under-gassed and still need the
-  second transaction.
+- **Put an admin in charge of it.** Either an admin sets the cap, or only an admin
+  may raise the limit. Both work, and both add an admin to a system designed not to
+  have one. The second also leaves everyone else, like a public relayer, at the
+  hardcoded minimum, so their messages still need the second transaction.
 
 Every contract that sends a cross-chain message carries constants like this one.
 None of them can be updated in place, and the chain gives them nothing to scale from.
