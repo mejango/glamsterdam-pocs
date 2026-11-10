@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.28;
 
-/// A cross-chain receiver with the same shape as a bridge "sucker" accepting a
+/// A cross-chain receiver with the same shape as a bridge endpoint accepting a
 /// batch from its peer chain: store the batch root and some per-batch accounting.
 /// Each field is a new storage slot the first time it's written.
 contract Receiver {
