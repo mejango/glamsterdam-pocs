@@ -84,8 +84,11 @@ contract that sends it is immutable. Every way an app can respond has the same f
   that. Another hardcoded number.
 - **Make the cap an admin setting.** Works, but adds an admin to a system designed
   not to have one.
-- **Require permission to raise the limit.** No number at all, but then a
-  permissionless relayer gets the second transaction anyway.
+- **Only let the project's operator raise the limit.** No number at all, and no
+  stranger can strand funds, because only an account the project trusts can ask for
+  more gas. But anyone else who sends a batch, like a public relayer, is back to the
+  hardcoded minimum, so their messages still arrive under-gassed and still need the
+  second transaction.
 
 Juicebox's cross-chain contracts have about 375k, 300k and 200k gas constants, and
 every other contract that sends a cross-chain message has its own. None of them can
