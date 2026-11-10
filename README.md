@@ -40,8 +40,9 @@ immutable.
 
 ## PoC 2: a hardcoded cross-chain gas limit, and why an app can't cleanly fix it
 
-Cross-chain messages carry a destination gas limit chosen by the sending contract.
-`src/Receiver.sol` has the same shape as a bridge receiver accepting a batch from its
+On most bridges, a cross-chain message carries a destination gas limit set on the
+sending chain, usually by the sending contract. (Arbitrum's L2 to L1 path is the
+exception: whoever executes the message on L1 supplies the gas.) `src/Receiver.sol` has the same shape as a bridge receiver accepting a batch from its
 peer chain: it stores the batch root and 8 accounting slots. The message asks for
 375,000 gas, a value sized to today's costs. The PoC runs the real
 `OptimismPortal2` and `L1CrossDomainMessenger`, finalizing the withdrawal first at
