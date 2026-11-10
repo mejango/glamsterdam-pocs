@@ -46,8 +46,11 @@ peer chain: it stores the batch root and 8 accounting slots. The message asks fo
 375,000 gas, a value sized to today's costs. The PoC runs the real
 `OptimismPortal2` and `L1CrossDomainMessenger`, finalizing the withdrawal first at
 `eth_estimateGas`, which is what a wallet or relayer sends, then across a sweep.
-OP Sepolia already runs the v9 messenger that records a failed relay so anyone can
-replay it; this assumes every OP Stack chain upgrades to it before Glamsterdam.
+OP Sepolia already runs the v9 messenger, which records a failed relay so anyone
+can replay it, and this assumes every OP Stack chain upgrades to it before
+Glamsterdam. So nothing is lost here. The cost is a second transaction for every
+batch sent at the hardcoded limit, and that second transaction is what an app
+would want to prevent.
 
 ```
 OP mainnet on mainnet, messenger "2.11.1", message asks for 375,000 gas
@@ -73,7 +76,8 @@ a relay that fails open doesn't revert, so the estimate lands in exactly the win
 that fails. The 375k minimum is too small to make the portal reject it.
 
 The constant was right when it was written. A repricing makes it wrong, and the
-contract that sends it is immutable. Every way an app can respond has the same flaw:
+contract that sends it is immutable. To get back to one transaction, an app has to
+change what limit its messages ask for, and every way of doing that has the same flaw:
 
 - **Hardcode a bigger number.** Tuned to the new gas rules. Wrong again after the next
   repricing.
