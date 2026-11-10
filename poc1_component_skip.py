@@ -3,7 +3,7 @@
 # inner payment fail, while the transaction still succeeds, by choosing the gas limit.
 # Runs Vault.withdraw at every gas limit in a range, with eth_simulateV1 on
 # Glamsterdam Sepolia and on Ethereum mainnet. Balances start non-zero,
-# like Juicebox balances that already hold funds. No deploy and no key needed.
+# like contract balances that already hold funds. No deploy and no key needed.
 import json, subprocess
 from concurrent.futures import ThreadPoolExecutor
 RPC = {'mainnet': 'https://ethereum-rpc.publicnode.com', 'glamsterdam sepolia': 'https://ethereum-sepolia-rpc.publicnode.com'}

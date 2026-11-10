@@ -12,7 +12,7 @@ python3 poc2_hardcoded_gas_limit.py
 
 ## PoC 1: a try/catch payment to another contract can be skipped by choosing the gas limit
 
-`src/ComponentSkip.sol` has the same shape as a Juicebox withdrawal that routes part
+`src/ComponentSkip.sol` has the same shape as a withdrawal that routes part
 of the funds to another composable contract (another project, a split recipient, a
 hook). `Vault.withdraw` pays 2.5% to a component in a `try`. The component mints
 tokens to the payer, and a hook records the new holder. If the component's payment
@@ -32,17 +32,18 @@ glamsterdam sepolia: Vault.withdraw at gas limits 30,000 to 900,000
 ```
 
 On mainnet, no gas limit gets the transaction through without paying the component.
-On Glamsterdam, any limit from 182k to 294k does. Juicebox V6 uses this pattern for
-cash outs, payout splits, reserved token splits and NFT tier splits, so in each of
-those the caller can make the inner payment fail while the outer call still
-succeeds. The contracts are immutable.
+On Glamsterdam, any limit from 182k to 294k does. Treasury protocols use this pattern
+wherever one contract routes funds into another it doesn't control: fees, payout
+splits, reserved token splits, NFT tier splits. In each of those the caller can make
+the inner payment fail while the outer call still succeeds. The contracts are
+immutable.
 
 ## PoC 2: a hardcoded cross-chain gas limit, and why an app can't cleanly fix it
 
 Cross-chain messages carry a destination gas limit chosen by the sending contract.
 `src/Receiver.sol` has the same shape as a bridge receiver accepting a batch from its
 peer chain: it stores the batch root and 8 accounting slots. The message asks for
-375,000 gas, which is what Juicebox's suckers hardcode today. The PoC runs the real
+375,000 gas, a value sized to today's costs. The PoC runs the real
 `OptimismPortal2` and `L1CrossDomainMessenger`, finalizing the withdrawal first at
 `eth_estimateGas`, which is what a wallet or relayer sends, then across a sweep.
 OP Sepolia already runs the v9 messenger that records a failed relay so anyone can
@@ -90,6 +91,5 @@ contract that sends it is immutable. Every way an app can respond has the same f
   hardcoded minimum, so their messages still arrive under-gassed and still need the
   second transaction.
 
-Juicebox's cross-chain contracts have about 375k, 300k and 200k gas constants, and
-every other contract that sends a cross-chain message has its own. None of them can
-be updated in place, and the chain gives them nothing to scale from.
+Every contract that sends a cross-chain message carries constants like this one.
+None of them can be updated in place, and the chain gives them nothing to scale from.

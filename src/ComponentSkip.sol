@@ -37,7 +37,7 @@ contract Component {
     }
 }
 
-/// Same shape as a Juicebox withdrawal that routes part of the funds to
+/// Same shape as a treasury withdrawal that routes part of the funds to
 /// another contract: pay the component in a try, and if that payment fails,
 /// don't block the user. Keep the component's share in the vault instead.
 contract Vault {

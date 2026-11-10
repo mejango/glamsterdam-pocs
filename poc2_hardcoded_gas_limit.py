@@ -1,6 +1,6 @@
 # PoC 2: cross-chain messages carry a destination gas limit that the sending
-# contract hardcodes. Here the message asks for 375,000 gas, what Juicebox's
-# suckers send today, and the receiver stores a batch root plus 8 accounting
+# contract hardcodes. Here the message asks for 375,000 gas, a value sized to
+# today's costs, and the receiver stores a batch root plus 8 accounting
 # slots. That fits on mainnet. Under Glamsterdam pricing it doesn't, so the
 # message is under-gassed when it arrives on L1.
 #
