@@ -48,9 +48,7 @@ peer chain: it stores the batch root and 8 accounting slots. The message asks fo
 `eth_estimateGas`, which is what a wallet or relayer sends, then across a sweep.
 OP Sepolia already runs the v9 messenger, which records a failed relay so anyone
 can replay it, and this assumes every OP Stack chain upgrades to it before
-Glamsterdam. So nothing is lost here. The cost is a second transaction for every
-batch sent at the hardcoded limit, and that second transaction is what an app
-would want to prevent.
+Glamsterdam.
 
 ```
 OP mainnet on mainnet, messenger "2.11.1", message asks for 375,000 gas
@@ -70,14 +68,36 @@ OP Sepolia on Glamsterdam Sepolia, messenger "2.13.0", message asks for 375,000 
 ```
 
 On mainnet the message lands at the estimate. Under Glamsterdam the same message,
-finalized at the estimate, arrives under-gassed and needs a second transaction.
-`eth_estimateGas` finds the lowest gas at which the transaction doesn't revert, and
-a relay that fails open doesn't revert, so the estimate lands in exactly the window
-that fails. The 375k minimum is too small to make the portal reject it.
+finalized at the estimate, arrives under-gassed. `eth_estimateGas` finds the lowest
+gas at which the transaction doesn't revert, and a relay that fails open doesn't
+revert, so the estimate lands in exactly the window that fails. The 375k minimum is
+too small to make the portal reject it.
+
+What that means for someone moving funds from the L2 to L1, which already takes a
+week on an OP Stack chain:
+
+**Today.** They send the batch on the L2. After the output root is posted, they
+prove the withdrawal on L1. Seven days later they finalize it on L1, with whatever
+gas their wallet estimates. The message is delivered, the funds are credited, and
+they claim them. Two L1 transactions, both of which their wallet knows how to send.
+
+**Under Glamsterdam.** The same, up to the finalize. The wallet estimates gas, the
+transaction succeeds, and nothing is credited. The portal has marked the withdrawal
+finalized, so finalizing again reverts. The messenger has recorded the relay as
+failed, but no wallet or bridge UI watches for that. Someone has to find the
+`FailedRelayedMessage` event, rebuild the original message from it, and call
+`relayMessage` on the messenger directly with about twice the gas the wallet chose.
+Until someone does, the funds sit in the messenger. Three L1 transactions, the last
+of which the user's tools don't know exists, and the only sign anything went wrong
+is a balance that didn't change.
+
+Nothing is lost in the second case, but every batch sent at the hardcoded limit
+goes through it. That third transaction is what an app would want to prevent.
 
 The constant was right when it was written. A repricing makes it wrong, and the
-contract that sends it is immutable. To get back to one transaction, an app has to
-change what limit its messages ask for, and every way of doing that has the same flaw:
+contract that sends it is immutable. To get rid of the third transaction, an app
+has to change what limit its messages ask for, and every way of doing that has the
+same flaw:
 
 - **Hardcode a bigger number.** Tuned to the new gas rules. Wrong again after the next
   repricing.
@@ -90,7 +110,7 @@ change what limit its messages ask for, and every way of doing that has the same
 - **Put an admin in charge of it.** Either an admin sets the cap, or only an admin
   may raise the limit. Both work, and both add an admin to a system designed not to
   have one. The second also leaves everyone else, like a public relayer, at the
-  hardcoded minimum, so their messages still need the second transaction.
+  hardcoded minimum, so their batches still need the third transaction.
 
 Every contract that sends a cross-chain message carries constants like this one.
 None of them can be updated in place, and the chain gives them nothing to scale from.
