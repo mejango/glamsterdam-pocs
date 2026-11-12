@@ -51,17 +51,54 @@ OP Sepolia already runs the v9 messenger, which records a failed relay so anyone
 can replay it, and this assumes every OP Stack chain upgrades to it before
 Glamsterdam.
 
+Every call for a chain, including the `eth_estimateGas`, is pinned to one L1
+block, and the simulated blocks are the two that follow it. The proof points at a
+real dispute game old enough that the withdrawal is mature at the pinned block, so
+nothing overrides time. `from` and `tx.origin` are the same address throughout.
+Each run writes the printed output and every JSON-RPC request and response to
+`runs/latest/`; the committed copy is the run below.
+
 ```
 OP mainnet on mainnet, messenger "2.11.1", message asks for 375,000 gas
-  finalize at eth_estimateGas (931,416): delivered
-  finalize at 2x the estimate (1,862,832): delivered
+  pinned block 26,401,682 (timestamp 1794520439), simulated blocks at +12s and +24s
+  from / tx.origin 0x00000000000000000000000000000000000B0B02, portal 0xbeb5fc579115071764c7423a4f12edde41f106ed, messenger 0x25ace71c97B33Cc4729CF772ae268934F7ab5fA1
+  proof: game 0x4a126f5c0a4fa2efad07b77d5b48075fe553fe91 (factory index 21109), proven at 1793912039, maturity delay 604800
+  withdrawalHash 0xa7964a49ed3161e659cb29361d43917c260e654a2fab76e46df2149aefe47142
+  msgHash (versioned, nonce 0x1000000000000000000000000000000000000000000000000000000000001) 0x7752e4d203440b36bd337cf24822a69de45636cc16ce8258f2727cd772e561bc
+  finalize at eth_estimateGas (931,416):
+    finalize call status 0x1, gasUsed 451,257
+    finalizedWithdrawals[withdrawalHash] = 0x0000000000000000000000000000000000000000000000000000000000000001
+    successfulMessages[msgHash] = 0x0000000000000000000000000000000000000000000000000000000000000001
+    failedMessages[msgHash] = 0x0000000000000000000000000000000000000000000000000000000000000000
+    delivered
+  finalize at 2x the estimate (1,862,832):
+    finalize call status 0x1, gasUsed 451,257
+    finalizedWithdrawals[withdrawalHash] = 0x0000000000000000000000000000000000000000000000000000000000000001
+    successfulMessages[msgHash] = 0x0000000000000000000000000000000000000000000000000000000000000001
+    failedMessages[msgHash] = 0x0000000000000000000000000000000000000000000000000000000000000000
+    delivered
   sweep of gas limits 400,000 to 10,000,000:
        400,000 to    900,000  tx reverts, try again later
        925,000 to 10,000,000  delivered
 
 OP Sepolia on Glamsterdam Sepolia, messenger "2.13.0", message asks for 375,000 gas
-  finalize at eth_estimateGas (1,517,344): recorded as failed, anyone can replay it
-  finalize at 2x the estimate (3,034,688): delivered
+  pinned block 12,121,640 (timestamp 1794520452), simulated blocks at +12s and +24s
+  from / tx.origin 0x00000000000000000000000000000000000B0B02, portal 0x16fc5058f25648194471939df75cf27a2fdc48bc, messenger 0x58Cc85b8D04EA49cC6DBd3CbFFd00B4B8D6cb3ef
+  proof: game 0x01c8c4db18c8f7f3b000575dd367c00e204974c7 (factory index 89907), proven at 1793912052, maturity delay 604800
+  withdrawalHash 0xb00a91fcf1da95107b3bb07fa4aeafe2257e32533b4a55bf9b922c7ed6454df5
+  msgHash (versioned, nonce 0x1000000000000000000000000000000000000000000000000000000000001) 0x7752e4d203440b36bd337cf24822a69de45636cc16ce8258f2727cd772e561bc
+  finalize at eth_estimateGas (1,517,344):
+    finalize call status 0x1, gasUsed 1,417,422
+    finalizedWithdrawals[withdrawalHash] = 0x0000000000000000000000000000000000000000000000000000000000000001
+    successfulMessages[msgHash] = 0x0000000000000000000000000000000000000000000000000000000000000000
+    failedMessages[msgHash] = 0x0000000000000000000000000000000000000000000000000000000000000001
+    recorded as failed, anyone can replay it
+  finalize at 2x the estimate (3,034,688):
+    finalize call status 0x1, gasUsed 1,505,707
+    finalizedWithdrawals[withdrawalHash] = 0x0000000000000000000000000000000000000000000000000000000000000001
+    successfulMessages[msgHash] = 0x0000000000000000000000000000000000000000000000000000000000000001
+    failedMessages[msgHash] = 0x0000000000000000000000000000000000000000000000000000000000000000
+    delivered
   sweep of gas limits 400,000 to 10,000,000:
        400,000 to  1,000,000  tx reverts, try again later
      1,025,000 to  1,600,000  recorded as failed, anyone can replay it
