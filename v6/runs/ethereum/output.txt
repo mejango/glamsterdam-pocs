@@ -1,0 +1,24 @@
+
+ethereum, payout: project 13, pinned block 26,414,699, from 0x00000000000000000000000000000000000B0B04
+  at 16M gas: ok, gasUsed 579,280, peak 579,280, events ['0x0153be20', '0xb1ed2cd5', '0xda42c5c1', '0xe6fee9c5', 'Pay', 'ProcessFee', 'SendPayoutToSplit', 'Transfer']
+  sweep 144,820 to 636,820 step 2,000:
+       144,820 to    578,820  tx reverts
+       580,820 to    636,820  everything delivered
+
+ethereum, nft: project 13, pinned block 26,414,700, from 0x00000000000000000000000000000000000B0B05
+  at 16M gas: ok, gasUsed 881,227, peak 881,227, events ['0x0153be20', '0x598baf7b', '0xb1ed2cd5', '0xe6fee9c5', 'Pay', 'Transfer']
+  sweep 220,306 to 968,306 step 2,000:
+       220,306 to    892,306  tx reverts
+       894,306 to    968,306  everything delivered
+
+ethereum, reserved: project 13, pinned block 26,414,701, from 0x00000000000000000000000000000000000B0B04
+  at 16M gas: ok, gasUsed 328,441, peak 373,041, events ['0x0153be20', '0x32411cac', '0x8c5be1e5', '0xe6fee9c5', 'Pay', 'SendReservedTokensToSplit', 'Transfer']
+  sweep 93,260 to 409,260 step 2,000:
+        93,260 to    371,260  tx reverts
+       373,260 to    409,260  everything delivered
+
+ethereum, cashout: project 13, pinned block 26,414,702, from 0x00000000000000000000000000000000000B0B03
+  at 16M gas: ok, gasUsed 503,329, peak 503,329, events ['0x0153be20', '0x7e71a5f6', '0xa6a919b3', '0xb1ed2cd5', '0xdf04e13e', '0xe6fee9c5', '0xfaf1d4bf', 'Pay', 'ProcessFee', 'Transfer']
+  sweep 125,832 to 551,832 step 2,000:
+       125,832 to    501,832  tx reverts
+       503,832 to    551,832  everything delivered

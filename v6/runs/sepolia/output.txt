@@ -1,0 +1,30 @@
+
+sepolia, payout: project 22, pinned block 12,134,570, from 0x00000000000000000000000000000000000B0B04
+  at 16M gas: ok, gasUsed 1,293,240, peak 1,293,240, events ['0x0153be20', '0xb1ed2cd5', '0xda42c5c1', '0xe6fee9c5', 'Pay', 'ProcessFee', 'SendPayoutToSplit', 'Transfer']
+  sweep 323,310 to 1,421,310 step 2,000:
+       323,310 to    715,310  tx reverts
+       717,310 to  1,105,310  payout succeeds, split to the other project skipped, money back in the paying project
+     1,107,310 to  1,291,310  tx reverts
+     1,293,310 to  1,421,310  everything delivered
+
+sepolia, nft: project 22, pinned block 12,134,572, from 0x00000000000000000000000000000000000B0B05
+  at 16M gas: ok, gasUsed 3,144,919, peak 3,144,919, events ['0x0153be20', '0x598baf7b', '0xb1ed2cd5', '0xe6fee9c5', 'Pay', 'Transfer']
+  sweep 786,229 to 3,458,229 step 2,000:
+       786,229 to  2,852,229  tx reverts
+     2,854,229 to  3,230,229  buyer keeps the NFT, tier split payment to the other project failed
+     3,232,229 to  3,458,229  everything delivered
+
+sepolia, reserved: project 22, pinned block 12,134,575, from 0x00000000000000000000000000000000000B0B04
+  at 16M gas: ok, gasUsed 780,925, peak 812,541, events ['0x0153be20', '0x32411cac', '0x8c5be1e5', '0xe6fee9c5', 'Pay', 'SendReservedTokensToSplit', 'Transfer']
+  sweep 203,135 to 893,135 step 2,000:
+       203,135 to    487,135  tx reverts
+       489,135 to    813,135  distribution succeeds, split to the other project failed, beneficiary got raw tokens
+       815,135 to    893,135  everything delivered
+
+sepolia, cashout: project 22, pinned block 12,134,576, from 0x00000000000000000000000000000000000B0B03
+  at 16M gas: ok, gasUsed 822,489, peak 822,489, events ['0x0153be20', '0x7e71a5f6', '0xa6a919b3', '0xb1ed2cd5', '0xdf04e13e', '0xe6fee9c5', '0xfaf1d4bf', 'Pay', 'ProcessFee', 'Transfer']
+  sweep 205,622 to 903,622 step 2,000:
+       205,622 to    677,622  tx reverts
+       679,622 to    817,622  cash-out succeeds, 2.5% fee payment failed and the fee is forgiven
+       819,622 to    823,622  tx reverts
+       825,622 to    903,622  everything delivered

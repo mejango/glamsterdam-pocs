@@ -152,3 +152,33 @@ same flaw:
 
 Every contract that sends a cross-chain message carries constants like this one.
 None of them can be updated in place, and the chain gives them nothing to scale from.
+
+## Juicebox V6: the four paths from the email (findings 2 to 5)
+
+`v6/sweep.py` reproduces findings 2 to 5 of the email sent to
+glamsterdam@ethereum.org against the live Juicebox V6 contracts, on Glamsterdam
+Sepolia and on Ethereum mainnet for comparison. Nothing is deployed: a fresh
+project is launched inside `eth_simulateV1`, paid, and the path under test is
+called across a sweep of gas limits, all pinned to one block. Each path is the
+PoC 1 shape in production code: a try/catch around a payment into another project.
+
+```
+python3 v6/sweep.py sepolia      # all four, or name them: payout nft reserved cashout
+python3 v6/sweep.py ethereum
+```
+
+Every JSON-RPC request and response for the setup, the ample-gas run and the first
+gas of each outcome band is in `v6/runs/<chain>/<scenario>.jsonl`; the full sweep
+is in `<scenario>.grid.json`, and the printed output in `output.txt`. The committed
+runs are from 2026-11-14.
+
+| Path | Glamsterdam Sepolia | Ethereum mainnet |
+| --- | --- | --- |
+| Payout split to another project (finding 2) | 717k to 1,105k: payout succeeds, split skipped, money back in the paying project | no window, delivered from 581k |
+| NFT tier split to another project (finding 3) | 2,854k to 3,230k: buyer keeps the NFT, split payment failed | no window, delivered from 894k |
+| Reserved token split to another project (finding 4) | 489k to 813k: beneficiary gets raw tokens, project never paid | no window, delivered from 373k |
+| Cash-out fee (finding 5) | 679k to 817k: cash-out succeeds, fee forgiven | no window, delivered from 503k |
+
+On mainnet the outer transaction runs out of gas before the inner payment can
+fail on gas alone. Under Glamsterdam the inner payment, which writes many fresh
+slots, fails first; the catch swallows it and the outer transaction succeeds.
