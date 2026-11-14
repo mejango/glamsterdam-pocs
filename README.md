@@ -155,6 +155,9 @@ None of them can be updated in place, and the chain gives them nothing to scale 
 
 ## Juicebox V6: the four paths from the email (findings 2 to 5)
 
+PoC 1 is the mechanism; this section is only for checking the email's claims
+against the live contracts, and the four paths below are all PoC 1 in production code.
+
 `v6/sweep.py` reproduces findings 2 to 5 of the email sent to
 glamsterdam@ethereum.org against the live Juicebox V6 contracts, on Glamsterdam
 Sepolia and on Ethereum mainnet for comparison. Nothing is deployed: a fresh
